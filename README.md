@@ -1,6 +1,3 @@
-Here's a polished and corrected version of your README for the **Mark Management System** project. The structure, formatting, and grammar have been improved for clarity and professionalism:
-
----
 
 # 🎓 Mark Management System
 
