@@ -18,7 +18,8 @@ if allowed_hosts_env:
     ALLOWED_HOSTS = allowed_hosts_env.split(",")
 else:
     # Default for development
-    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+    ALLOWED_HOSTS = ['mark-management.onrender.com', 'localhost', '127.0.0.1']
+
 
 
 INSTALLED_APPS = [
