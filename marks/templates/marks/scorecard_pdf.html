@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        @media print {
+            body {
+                background-color: #fff;
+                padding: 0;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            @page {
+                size: A4;
+                margin: 20mm;
+            }
+        }
+
+        .container {
+            max-width: 900px;
+            background-color: white;
+            margin: 0 auto;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            margin-bottom: 20px;
+            color: #2d3748;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+        }
+
+        p {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .pass {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .fail {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .neutral {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: 600;
+        }
+
+        .improve {
+            color: #dc2626;
+            font-size: 0.85em;
+            font-style: italic;
+            margin-left: 5px;
+            font-weight: bold;
+        }
+
+        .summary {
+            background-color: #f9fafb;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+        }
+
+        .summary td {
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .summary .total {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .button-area {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            background-color: #2563eb;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #1e40af;
+        }
+
+        .link {
+            color: #2563eb;
+            text-decoration: underline;
+            font-size: 1em;
+        }
+
+        .link:hover {
+            color: #1e3a8a;
+        }
+
+        .close-button {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: #005e6e;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            z-index: 1000;
+        }
+
+        .close-button:hover {
+            background-color: #85f6fa;
+        }
+
+        @media print {
+            body {
+                background-color: #fff;
+                padding: 0;
+                font-size: 12px;
+                line-height: 1.2;
+            }
+
+            .container {
+                padding: 20px;
+                box-shadow: none;
+                border: none;
+            }
+
+            h1, h2 {
+                margin: 10px 0;
+                line-height: 1.3;
+            }
+
+            p, td, th {
+                margin: 4px 0;
+                line-height: 1.2;
+                padding: 6px;
+            }
+
+            table {
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+
+            .summary {
+                padding: 10px;
+            }
+
+            .btn,
+            .no-print,
+            .close-button {
+                display: none !important;
+            }
+        }
+    </style>
+    <button class="close-button" onclick="window.location.href='/'">⬅️  Back</button>
+    <title>{{ student_name }}'s Scorecard</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Scorecard for {{ student_name }}</h1>
+
+        <div>
+            <h2>Student Information</h2>
+            <p><strong>Student ID:</strong> {{ student_id }}</p>
+            <p><strong>Date of Birth:</strong> {{ date_of_birth|date:"F d, Y" }}</p>
+            <p><strong>Overall Status:</strong>
+                <span class="badge {% if status == 'PASS' %}pass{% elif status == 'FAIL' %}fail{% else %}neutral{% endif %}">
+                    {{ status }}
+                </span>
+            </p>
+        </div>
+
+        <div>
+            <h2>Marks Achieved</h2>
+            {% if marks %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Score</th>
+                        <th>Out Of</th>
+                        <th>Percentage</th>
+                        <th>Status</th>
+                        <th>Date Recorded</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mark in marks %}
+                    <tr>
+                        <td>{{ mark.subject }}</td>
+                        <td>{{ mark.marks }}</td>
+                        <td>
+                            {{ mark.out_of|floatformat:2 }}
+                            {% if mark.percentage < 40 %}
+                            <span class="improve">(Needs Improvement)</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ mark.percentage|floatformat:2 }}%</td>
+                        <td>
+                            <span class="badge {% if mark.result %}pass{% else %}fail{% endif %}">
+                                {% if mark.result %}Pass{% else %}Fail{% endif %}
+                            </span>
+                        </td>
+                        <td>{{ mark.date|date:"F d, Y" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No marks recorded for this student yet.</p>
+            {% endif %}
+        </div>
+
+        <div class="summary">
+            <h2>Overall Score Summary</h2>
+            <table>
+                <tr>
+                    <th>Total Obtained Marks</th>
+                    <th>Total Possible Marks</th>
+                    <th>Overall Percentage</th>
+                </tr>
+                <tr>
+                    <td>{{ total_obtained_marks|floatformat:2 }}</td>
+                    <td>{{ total_possible_marks|floatformat:2 }}</td>
+                    <td class="total">{{ overall_percentage|floatformat:2 }}%</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="button-area no-print">
+            <button class="btn" onclick="window.print()">Print Scorecard</button>
+        </div>
+    </div>
+</body>
+</html>

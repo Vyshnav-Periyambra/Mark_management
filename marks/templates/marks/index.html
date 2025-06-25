@@ -1,0 +1,197 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Marks Entry</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+    <link rel="icon" href="{% static 'logo.png' %}" type="image/x-icon" />
+  </head>
+  <body>
+    <!-- <h1>Marks Management System</h1> -->
+    <nav class="navbar">
+  <div class="logo-container">
+    <img src="{% static 'logo.png' %}" alt="Logo" class="logo" />
+    <span class="site-title">Marks Management</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="?scrollTo=#markForm">Add Marks</a></li>
+    <li><a href="?scrollTo=marksTable">View Marks</a></li>
+    
+    <li><a href="?scrollTo=#showSummaryBtn">Summary</a></li>
+  </ul>
+</nav>
+
+   
+<div class="breaker"> </div> 
+
+<form id="markForm">
+  <table class="markFormtable">
+    <tr>
+      <th colspan="3">Evaluation Score</th>
+    </tr>
+    <tr>
+      <td><label for="name">Name:</label></td>
+      <td><input type="text" id="name" required /></td>
+    </tr>
+    <tr>
+      <td><label for="dob">Date of Birth:</label></td>
+      <td><input type="date" id="dob" value="2010-01-01" required /></td>
+    </tr>
+    <tr>
+      <td><label for="date">Date:</label></td>
+      <td><input type="date" id="date" value="" required /></td>
+    </tr>
+    <tr>
+      <td><label for="subject">Subject:</label></td>
+      <td>
+        <select id="subject" required>
+          <option value="" disabled selected>Select Subject</option>
+          <option value="Physics">Physics</option>
+          <option value="Chemistry">Chemistry</option>
+          <option value="Maths">Maths</option>
+          <option value="English">English</option>
+          <option value="Hindi">Hindi</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td><label for="marks">Marks:</label></td>
+      <td>
+        <!-- Removed onchange as it's now handled by JS event listener -->
+        <input type="number" id="marks" required />
+      </td>
+    </tr>
+    <tr>
+      <td><label for="outOf">Out of:</label></td>
+      <td>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: larger;">
+      <input type="number" id="outOf" required />
+      <span id="formResultLabel" class="result-label"></span>
+    </div>
+    <tr>
+      
+      <td colspan="2" style="text-align: center">
+        <!-- Changed class to id="addUpdateBtn" and added id="cancelEditBtn" -->
+        <button type="submit" id="addUpdateBtn" class="submit-btn">Add Entry</button>
+        <button type="button" id="cancelEditBtn" class="reset-btn" style="display: none;">Cancel Edit</button>
+        <!-- The original reset button functionality is handled by the cancelEditBtn or full page reload if needed -->
+      </td>
+    </tr>
+  </table>
+</form>
+
+<div class="breaker"> </div>
+
+    <table id="marksTable" class="table_mark" >
+      <thead>
+        <tr>
+          <th colspan="12">Marks Table</th>
+        </tr>
+        <tr>
+          <th>Checkbox</th>
+          <th>Name <button data-col-index="0">&#11163;</button></th>
+          <!-- Added sort button for DOB -->
+          <!-- <th>Dob <button data-col-index="7">&#11163;</button></th> -->
+          <th>Date <button data-col-index="1">&#11163;</button></th>
+          <!-- Added sort button for Subject and adjusted data-col-index -->
+          <th>Subject <button data-col-index="2">&#11163;</button></th>
+          <th>Marks <button data-col-index="3">&#11163;</button></th>
+          <th>Out of <button data-col-index="4">&#11163;</button></th>
+          <th>Percentage <button data-col-index="5">&#11163;</button></th>
+          <th>Result <button data-col-index="6">&#11163;</button></th>
+          <th colspan="2">Actions</th> <!-- Combined Edit and Delete into one column for consistency -->
+        </tr>
+      </thead>
+      <tbody>
+        <!-- data -->
+      </tbody>
+      <tfoot>
+        <!-- data -->
+      </tfoot>
+    </table>
+    <div class="moveDestination">
+    <select id="moveDestination">
+      <option value="pass">Move to Pass Table</option>
+      <option value="fail">Move to Fail Table</option>
+    </select>
+    <button id="moveSelectedBtn">Move Selected</button>
+
+  </div>
+
+    <div class="container">
+    <div>
+      <h3 class="pass-text">Pass Table</h3>
+      <table id="passTable" >
+        <thead>
+          <tr>
+            <th>Name</th>
+            <!-- <th>Dob</th> -->
+            <th>Date</th>
+            <th>Subject</th>
+            <th>Marks</th>
+            <th>Result</th>
+            <th>Out of</th>
+            <th>Percentage</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+</div>
+    <div>
+      <h3 class="fail-text">Fail Table</h3>
+      <table id="failTable" >
+        <thead>
+          <tr>
+            <th>Name</th>
+            <!-- <th>Dob</th> -->
+            <th>Date</th>
+            <th>Subject</th>
+            <th>Marks</th>
+            <th>Result</th>
+            <th>Out of</th>
+            <th>Percentage</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+</div>
+    </div>
+    <br />
+    <div class="flex justify-center mt-6">
+      <button id="showSummaryBtn" class="rounded-lg">click to view Student Grand Totals</button>
+    </div>
+
+    <div id="studentSummarySection">
+      <!-- <h3></h3> -->
+      <table id="summaryTable">
+        <thead>
+          <tr>
+            <th colspan="6"><h3>Student Grand Totals<h3></th>
+          </tr>
+          <tr>
+            <th>Name</th>
+            <th>Total Marks</th>
+            <th>Total Out of</th>
+            <th>Total Percentage</th>
+            <th>Action</th>
+            <th>Download</th>
+        
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div id="messageBoxOverlay" class="message-box-overlay">
+      <div class="message-box">
+        <h4 id="messageBoxTitle"></h4>
+        <p id="messageBoxContent"></p>
+        <button id="messageBoxCloseBtn">OK</button>
+      </div>
+    </div>
+    <script src="{% static 'script.js' %}"></script>
+  </body>
+</html>
